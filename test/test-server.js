@@ -55,7 +55,7 @@ describe('Shopping List', function() {
         res.body.should.be.a('array');
 
         // because we create three items on app load
-        res.body.length.should.be.at.least(1);
+        res.body.length.should.be.at.least(3);
         
         // response body contains an array of objects, shopping list items
         // looping through each item object in the response body
@@ -146,6 +146,112 @@ describe('Shopping List', function() {
       .then(function(res) {
         return chai.request(app)
           .delete(`/shopping-list/${res.body[0].id}`);
+      })
+      .then(function(res) {
+        res.should.have.status(204);
+      });
+  });
+});
+
+describe('Recipes', function() {
+
+  before(function() {
+    return runServer();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+
+  it('should list items on a GET', function() {
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('array');
+        res.body.length.should.be.at.least(2);
+
+        const expectedKeys = ['name', 'id', 'ingredients'];
+
+        res.body.forEach(function(recipe) {
+          recipe.should.be.a('object');
+          recipe.should.include.keys(expectedKeys);
+        });
+      });
+  });
+
+  it('should add an item on a POST request', function() {
+    const newRecipe = {
+      name: 'green shake',
+      ingredients: ['spinach', 'banana', 'chlorella']
+    };
+
+    return chai.request(app)
+      .post('/recipes')
+      .send(newRecipe)
+      .then(function(res) {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.include.keys(['name', 'id', 'ingredients']);
+        res.body.id.should.not.be.null;
+
+        res.body.should.deep.equal(Object.assign(newRecipe, {id: res.body.id}));
+      });
+  });
+
+  // rather than retrieving the first recipe, and relying on a recipe being there,
+  // we should make a post for a new recipe and test updating that new recipe
+  it('should update an item on PUT', function() {
+
+    const newRecipe = {
+      name: 'pasta',
+      ingredients: ['noodles', 'sauce', 'peppers']
+    };
+
+    const updatedNewRecipe = {
+      name: 'pasta maranara',
+      ingredients: ['penne', 'maranara', 'green peppers']
+    };
+    return chai.request(app)
+      .post('/recipes')
+      .send(newRecipe)
+
+      // recieves response from last promise (post request)
+      .then(function(res) {
+        updatedNewRecipe.id = res.body.id;
+        return chai.request(app)
+          .put(`/recipes/${updatedNewRecipe.id}`)
+          .send(updatedNewRecipe);
+      })
+
+      // recieves response sent to us from the promise in our last then method (put request)
+      .then(function(res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.should.be.a('object');
+        res.body.should.include.keys(['id', 'name', 'ingredients']);
+        res.body.id.should.not.be.null;
+
+        res.body.should.deep.equal(Object.assign(updatedNewRecipe));
+      });
+  });
+
+  // rather than relying on a recipe object existing we post a new one and delete that new recipe
+  it('should delete an item on DELETE', function() {
+    const newRecipe = {
+      name: 'pizza',
+      ingredients: ['bread', 'sauce', 'cheese']
+    };
+
+    return chai.request(app)
+      .post('/recipes')
+      .send(newRecipe)
+      .then(function(res) {
+        
+        return chai.request(app)
+          .delete(`/recipes/${res.body.id}`);
       })
       .then(function(res) {
         res.should.have.status(204);
