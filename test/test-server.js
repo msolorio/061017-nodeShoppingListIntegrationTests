@@ -43,6 +43,10 @@ describe('Shopping List', function() {
     // we must either return a Promise object or else call a `done` callback
     // at the end of the test. The `chai.request(server).get...` call is asynchronous
     // and returns a Promise, so we just return it.
+
+    // the request we make with the chai HTTP client is asynchronous and returns a promise
+    // when resolved we run code in .then
+    // test inspects the response objects
     return chai.request(app)
       .get('/shopping-list')
       .then(function(res) {
@@ -52,8 +56,11 @@ describe('Shopping List', function() {
 
         // because we create three items on app load
         res.body.length.should.be.at.least(1);
-        // each item should be an object with key/value pairs
-        // for `id`, `name` and `checked`.
+        
+        // response body contains an array of objects, shopping list items
+        // looping through each item object in the response body
+        // checking that each is an object
+        // and each has required keys
         const expectedKeys = ['id', 'name', 'checked'];
         res.body.forEach(function(item) {
           item.should.be.a('object');
@@ -104,6 +111,9 @@ describe('Shopping List', function() {
       // first have to get so we have an idea of object to update
       .get('/shopping-list')
       .then(function(res) {
+
+        // retrieving the id of the first item in the shopping list
+        // setting it to updateData.id
         updateData.id = res.body[0].id;
         // this will return a promise whose value will be the response
         // object, which we can inspect in the next `then` back. Note

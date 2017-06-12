@@ -1,4 +1,3 @@
-
 const express = require('express');
 const morgan = require('morgan');
 
@@ -61,10 +60,10 @@ function closeServer() {
   });
 }
 
-// if server.js is called directly (aka, with `node server.js`), this block
-// runs. but we also export the runServer command so other code (for instance, test code) can start the server as needed.
+// runs when running server.js directly, with node server.js in command line
 if (require.main === module) {
   runServer().catch(err => console.error(err));
 };
 
+// makes these objects and methods available to other files that need them such as our integration test files
 module.exports = {app, runServer, closeServer};
