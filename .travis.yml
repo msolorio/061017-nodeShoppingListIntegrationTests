@@ -1,9 +1,2 @@
 language: node_js
 node_js: node
-deploy:
-  provider: heroku
-  api_key:
-    secure: RTeOVpJP+MhJ/u14LVRXEzl5fZRn71xfE3vLOi1ylNbZmVOv+GTjlQ47nSOdoSq8clsoMrszLUxwnPgZT5Dc+SPZXgM71Vw4u+z/uadBdLMPZC3MrVkXNO4W6b3MkdzVFNDY8k+GYxUnKr0ASijAZEnB08+JQHsl9Z6OoW0mHgnBgImcn4MX/894IkSSgLn/qRFuZ76KRKi+DFT0freuNWAXTAWKbZoJZa9ZrvtwJeyk6f8BcO0Mo/XSpXHu8D3zjwsOqO6L8ciCV3XylGfzZwJOrQQgiK4vnTngOA3UcHd5ytR/PWWuE25IpxsKXcKTv9nvPg91+fofyoWDUb/fI4tDjpO7LTSZKNxy+V1Pan76W8UX1+j03b6GkAwOEl3GrIRzzHLSkYHVa0EVapHrNz0G6cfXU+wl3ST5+Rkc67jk5/GjtiDhMM5KMDuhEsEBZZaEMK9hJD2vgH1WMs/cXwQsTumcd9InX3K+eL+BVEhruZRpv+/HPj6vnuxwhHw3KWjKuWbDTkQb67upV1pMIvn2osevVp78Ys6jOlePf9xz3HNTskO5Uj8L24ddf1kUfk5iyAY1Kguk4XIb+VGRL+MddoP+Mvev7dFW2pi7JFmCPu5mBiNCCJ14PHOB7RDrxALe3+vV/jH6cqOrmLd2sFYv9STvapfYzPcx7gkRiiE=
-  app: desolate-eyrie-56001
-  on:
-    repo: msolorio/061017-nodeShoppingListIntegrationTests
